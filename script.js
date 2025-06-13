@@ -1,30 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    //انیویەتی بچێتە ناو Supabase.
-*   **داتاکەت بە سەرکەوتوویی وەرگیراوە:** لیستی ئەپەکانت (کە تەنها یەک ئەپی تێ ---- Global Elements & State ----
+    // ---- 1. ELEMENT CACHE & GLOBAL STATE ----
     const getEl = (id) => document.getElementById(id);
     let state = { apps: [] };
-    let currentUser = null; 
+    let currentUser = null;
 
-    // ---- API Definition ----
     const API = {
         getApps: async () => fetch('/.netlify/functions/get-apps'),
-دایە) بە تەواوی گەیشتۆتە فرۆنتئێندەکەت.
-*   کێشەی سەرەکی، وەک پێشبینیمان دەکرد، تەنها و        addApp: async (data) => fetch('/.netlify/functions/add-app', { method: 'POST', body: JSON.stringify(data) }),
+        addApp: async (data) => fetch('/.netlify/functions/add-app', { method: 'POST', body: JSON.stringify(data) }),
         updateApp: async (data) => fetch('/.netlify/functions/update-app', { method: 'PUT', body: JSON.stringify(data) }),
-        deleteApp: async (id) => fetch('/.netlify/functions/delete-app', { method: ' تەنها لەناو **لۆژیکی پیشاندانی ئەو داتایەدا بووە** لەناو `script.js` (واتە لەناو فەنکشنی `renderApps`).
-
----
-
-### چارەسەری کۆتایی و یەکجاری
-
-ئێستا کە دڵنیاین داتاکە دەگات، باPOST', body: JSON.stringify({ id }) }),
+        deleteApp: async (id) => fetch('/.netlify/functions/delete-app', { method: 'POST', body: JSON.stringify({ id }) }),
         updateDownloads: async (id) => fetch('/.netlify/functions/update-downloads', { method: 'POST', body: JSON.stringify({ id }) }),
         uploadFile: async (data) => fetch('/.netlify/functions/upload-file', { method: 'POST', body: JSON.stringify(data) })
     };
 
-    // ---- UI Feedback ----
-    const showToast = (message, type = 'info') => {
-        const toastContainer = getEl('toast- ئەو کۆدە سادەیەی تاقیکردنەوە لابەرین و **وەشانی کۆتایی و پاککراوەی `script.js`** دابنێین کە دەتوانێت ئەو داتایە وەcontainer');
+    // ---- 2. CORE FUNCTIONS ----
+
+    function showToast(message, type = 'info') {
+        const toastContainer = getEl('toast-container');
         if (!toastContainer) return;
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -35,12 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
         }, 4000);
-    };
+    }
 
-    // ---- Data Flow ----
-    const loadData = asyncربگرێت و بیکات بەو کارتانەی کە لە دیزاینەکەدا هەن.
-
-تکایە ** () => {
+    async function loadData() {
         try {
             const response = await API.getApps();
             if (!response.ok) throw new Error(`Server Error: ${response.status}`);
@@ -48,135 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
             renderAll();
         } catch (error) {
             console.error("Error loading data:", error);
-            showToast("کێشەیەک لە وەرگرتنی داتادا ڕوویدا",هەموو کۆدی `script.js`ـی کۆنت بسڕەوە** و **ئەم کۆدە نوێیەی خوارەوە لە شوێنی دابنێ**. من هەموو فەنکشنەکانم بە شێوەیەک نووسیوەتەوە کە پاک و بێ کێشە بن.
-
-**`script "error");
-        }
-    };
-
-    // ---- Rendering Functions ----
-    const renderAll = () => {
-        renderApps();
-        if (currentUser && currentUser.role === 'admin') {
-            renderDashboard();
-        }
-    };
-
-    const renderApps = (appsToRender = state.apps) => {
-        const appCategoriesContainer = getEl('app-categories');
-        appCategoriesContainer.innerHTML = '';
-        const categories = { games: { title: 'یارییەکان', apps: [] }, tools: { title: 'ئامرازەکان', apps: [] }, social: { title: 'کۆمەڵایەتی', apps: [].js` (Final Working Version):**
-
-```javascript
-document.addEventListener('DOMContentLoaded', () => {
-    // ---- Global State & API ----
-    let state = { apps: [] };
-    let currentUser = null; 
-
-    const API = {
-        getApps: async () => fetch('/.netlify/functions/get-apps'),
-        addApp: async (data) => fetch('/.netlify/functions/add-app', { method: 'POST', body: JSON.stringify(data) }),
-        updateApp: async (data) => fetch('/.netlify/ } };
-        
-        (appsToRender || []).forEach(app => {
-            // Note: In your test data, category is "کۆمەڵایەتی". 
-            // The code looks for `social`. Make sure your database values match the keys here.
-            // Let's make it more robust.
-            const appCategoryKey = app.category.toLowerCase().trim();
-            if (categories[appCategoryKey]) {
-                categories[appCategoryKey].apps.push(app);
-            }
-        });
-
-        const isAdmin = currentUserfunctions/update-app', { method: 'PUT', body: JSON.stringify(data) }),
-        deleteApp: async (id) => fetch('/.netlify/functions/delete-app', { method: 'POST', body: JSON.stringify({ id }) }),
-        updateDownloads: async (id) => fetch('/.netlify/functions/update-downloads', { method: 'POST', body: JSON.stringify({ id }) }),
-        uploadFile: async (data) => fetch('/.netlify/functions/upload-file', { method: 'POST', body: JSON.stringify(data) })
-    };
-
-    const getEl = (id) => document.getElementById(id);
-
-    // ---- UI Feedback ----
-    const showToast = (message, type = 'info') => { && currentUser.role === 'admin';
-        for (const key in categories) {
-            if (categories[key].apps.length > 0) {
-                const section = document.createElement('section');
-                section.className = 'category-section';
-                const appsHtml = categories[key].apps.map(app => `
-                    <div class="app-card" data-id="${app.id}">
-                        ${isAdmin ? `<div class="admin-actions"><button class="btn edit-app-btn">✏️</button><button class="btn delete-app-btn">🗑️</button></div>` : ''}
-                        <img src="${app.icon}" alt="${app.name}" class="app-icon" onerror="this.src='https://i.ibb.co
-        const toastContainer = getEl('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        toastContainer.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 4000);
-    };
-
-    // ---- Data Management ----
-    const loadData = async () => {
-        try {
-            const response = await API.getApps();
-            if (!response.ok) throw new Error(`Server Error: ${response.status}`);
-            state.apps = await/9vjYpQZ/apk-store-logo.png'">
-                        <span class="app-name">${app.name}</span>
-                    </div>`).join('');
-                section.innerHTML = `<h2 class="category-title">${categories[key].title}</h2><div class="app-grid">${appsHtml}</div>`;
-                appCategoriesContainer.appendChild(section);
-            }
-        }
-    };
-
-    const renderDashboard = () => { /* ... Functionality from previous versions ... */ };
-    const renderAppDetails = (appId) => { /* ... Functionality from previous versions ... */ };
-
-    // ---- Action Handlers ----
-    const handleEditApp = (id) => { /* ... Functionality from previous versions ... */ };
-    const handleDeleteApp = async (id) => { /* ... Functionality from previous versions ... */ };
-    const handleDownloadClick = async (e) => { /* ... Functionality response.json();
-            renderAll();
-        } catch (error) {
-            console.error("Error loading data:", error);
             showToast("کێشەیەک لە وەرگرتنی داتادا ڕوویدا", "error");
         }
-    };
+    }
 
-    // ---- Rendering ----
-    const renderAll = () => {
+    // ---- 3. RENDERING LOGIC ----
+
+    function renderAll() {
         renderApps();
         if (currentUser && currentUser.role === 'admin') {
             renderDashboard();
         }
-    };
+    }
 
-    const renderApps = (appsToRender = state.apps) => {
+    function renderApps(appsToRender = state.apps) {
         const appCategoriesContainer = getEl('app-categories');
         appCategoriesContainer.innerHTML = '';
-        const categories = {
-            "یاری": { title: 'یارییەکان', apps: [] },
-            "ئامراز": { title: 'ئامرازەکان', apps: [] },
-            "کۆمەڵ from previous versions ... */ };
-    const handleAddOrUpdateApp = async (event) => { /* ... Functionality from previous versions ... */ };
-    const resetAppForm = () => { /* ... Functionality from previous versions ... */ };
-    const toBase64 = file => new Promise((resolve, reject) => { /* ... Functionality from previous versions ... */ });
-
-    // ---- Navigation & UI ----
-    const navigateToPage = (pageId, appId = null) => { /* ... Functionality from previous versions ... */ };
-    const setupUIForRole = () => { /* ... Functionality from previous versions ... */ };
-
-    // ---- Authentication ----
-    const handleLogin = (event) => { /* ... Functionality from previous versions ... */ };
-    const handleLogout = () => { /* ... Functionality from previous versions ... */ };
-    const checkSession = () => { /* ... Functionality from previous versions ...ایەتی": { title: 'کۆمەڵایەتی', apps: [] }
-        };
-
+        const categories = { social: { title: 'کۆمەڵایەتی', apps: [] }, games: { title: 'یارییەکان', apps: [] }, tools: { title: 'ئامرازەکان', apps: [] } };
         (appsToRender || []).forEach(app => {
-            // Check against Kurdish category names
             if (app.category && categories[app.category]) {
                 categories[app.category].apps.push(app);
             }
@@ -188,20 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 section.className = 'category-section';
                 const appsHtml = categories[key].apps.map(app => `
                     <div class="app-card" data-id="${app.id}">
-                        ${isAdmin ? `<div class="admin-actions"><button class="btn edit-app-btn" data */ };
-    
-    // ---- Main Initialization ----
-    function init() {
-        // This is the function that wires up the whole application
-        
-        // Setup static event listeners
-        getEl('login-form').addEventListener('submit', handleLogin);
-        getEl('logout-btn').addEventListener('click', handleLogout);
-        getEl('admin-login-btn').addEventListener('click', () => getEl('login-modal-overlay').classList.remove('hidden'));
-        getEl('close-login-btn').addEventListener('click', () => getEl('login-modal-overlay').classList.add('hidden'));
-        getEl('menu-toggle-btn').addEventListener('click', () => getEl('sidebar').classList.add('open'));
-        getEl('close-btn').addEventListener('click', () => getEl('sidebar').classList.remove('open'));
-        getEl('-id="${app.id}">✏️</button><button class="btn delete-app-btn" data-id="${app.id}">🗑️</button></div>` : ''}
+                        ${isAdmin ? `<div class="admin-actions"><button class="btn edit-app-btn">✏️</button><button class="btn delete-app-btn">🗑️</button></div>` : ''}
                         <img src="${app.icon}" alt="${app.name}" class="app-icon" onerror="this.src='https://i.ibb.co/9vjYpQZ/apk-store-logo.png'">
                         <span class="app-name">${app.name}</span>
                     </div>`).join('');
@@ -209,28 +74,241 @@ document.addEventListener('DOMContentLoaded', () => {
                 appCategoriesContainer.appendChild(section);
             }
         }
-    };
+    }
 
-    const renderDashboard = () => { /* ... Functionality from previous final version ... */ };
-    const renderAppDetails = (appId) => { /* ... Functionality from previous final version ... */ };
+    function renderDashboard() {
+        getEl('total-apps').textContent = state.apps.length;
+        getEl('total-downloads').textContent = state.apps.reduce((sum, app) => sum + (app.downloads || 0), 0).toLocaleString();
+        getEl('most-downloaded-list').innerHTML = [...state.apps]
+            .sort((a, b) => (b.downloads || 0) - (a.downloads || 0))
+            .slice(0, 5)
+            .map(app => `<div class="list-item"><span>${app.name}</span><span class="views-count">${(app.downloads || 0).toLocaleString()} داگرتن</span></div>`)
+            .join('');
+    }
 
-    // ---- Actions ----
-    const handleEditApp = (id) => { /* ... */ };
-    const handleDeleteApp = async (id) => { /* ... */ };
-    const handleDownloadClick = async (e) => { /* ... */ };
+    function renderAppDetails(appId) {
+        const app = state.apps.find(a => a.id === parseInt(appId));
+        if (!app) { navigateToPage('apps'); return; }
+        getEl('details-app-icon').src = app.icon;
+        getEl('details-app-name').textContent = app.name;
+        getEl('details-app-category').textContent = app.category;
+        getEl('details-app-description').textContent = app.description;
+        getEl('details-app-version').textContent = app.version;
+        getEl('details-app-downloads').textContent = (app.downloads || 0).toLocaleString();
+        const downloadBtn = getEl('details-download-btn');
+        downloadBtn.href = app.download_url;
+        downloadBtn.setAttribute('download', `${app.name}.apk`);
+        downloadBtn.dataset.id = app.id;
+    }
 
-    // ---- Navigation & UI Setup ----
-    const navigateToPage = (pageId, appId = null) => { /* ... */ };
-    const setupUIForRole = () => { /* ... */ };
+    // ---- 4. ACTION HANDLERS ----
+    function resetAppForm() {
+        const form = getEl('add-app-form');
+        if (form) form.reset();
+        if (getEl('app-id-input')) getEl('app-id-input').value = '';
+        const iconPreview = getEl('icon-preview');
+        if (iconPreview) {
+            iconPreview.classList.add('hidden');
+            iconPreview.src = '#';
+        }
+        if (getEl('apk-file-name')) getEl('apk-file-name').textContent = '';
+        if (getEl('form-title')) getEl('form-title').textContent = "زیادکردنی ئەپی نوێ";
+        if (getEl('submit-app-btn')) getEl('submit-app-btn').textContent = "زیادکردن";
+    }
 
-    // ---- Authentication ----
-    constoverlay').addEventListener('click', (e) => {
+    function handleEditApp(id) {
+        const app = state.apps.find(a => a.id === parseInt(id));
+        if (app) {
+            resetAppForm();
+            getEl('form-title').textContent = "دەستکاری کردنی ئەپ";
+            getEl('submit-app-btn').textContent = "پاشەکەوتکردن";
+            getEl('app-id-input').value = app.id;
+            getEl('app-name').value = app.name;
+            getEl('app-description').value = app.description;
+            getEl('app-category').value = app.category;
+            getEl('app-version').value = app.version;
+            const iconPreview = getEl('icon-preview');
+            iconPreview.src = app.icon;
+            iconPreview.classList.remove('hidden');
+        }
+    }
+
+    async function handleDeleteApp(id) {
+        if (confirm("دڵنیایت لە سڕینەوەی ئەم ئەپە؟")) {
+            try {
+                const response = await API.deleteApp(parseInt(id));
+                if (!response.ok) throw new Error('Failed to delete on server');
+                showToast("ئەپ سڕایەوە", "success");
+                await loadData();
+            } catch (error) {
+                showToast(error.message, "error");
+            }
+        }
+    }
+
+    async function handleDownloadClick(e) {
+        const appId = e.currentTarget.dataset.id;
+        try {
+            await API.updateDownloads(appId);
+            const app = state.apps.find(a => a.id === parseInt(appId));
+            if (app) {
+                app.downloads = (app.downloads || 0) + 1;
+                renderAppDetails(appId);
+                if (currentUser && currentUser.role === 'admin') renderDashboard();
+            }
+        } catch (error) {
+            console.error("Failed to update download count:", error);
+        }
+    }
+    
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
+
+    async function handleAddOrUpdateApp(event) {
+        event.preventDefault();
+        const submitBtn = getEl('submit-app-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '...پاشەکەوت دەکرێت';
+
+        try {
+            const id = getEl('app-id-input').value ? parseInt(getEl('app-id-input').value) : null;
+            const iconFile = getEl('app-icon-file').files[0];
+            const apkFile = getEl('app-apk-file').files[0];
+            let iconUrl, downloadUrl;
+
+            if (id) {
+                const existingApp = state.apps.find(a => a.id === id);
+                iconUrl = existingApp.icon;
+                downloadUrl = existingApp.download_url;
+            }
+            if (!id && !iconFile) throw new Error('پێویستە ئایکۆنێک هەڵبژێریت.');
+            
+            if (iconFile) {
+                showToast('خەریکی ئەپلۆدکردنی ئایکۆنە...', 'info');
+                const fileBody = await toBase64(iconFile);
+                const response = await API.uploadFile({ bucket: 'icons', fileName: `${Date.now()}-${iconFile.name}`, fileBody, contentType: iconFile.type });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Failed to upload icon');
+                iconUrl = result.publicUrl;
+            }
+            if (apkFile) {
+                showToast('خەریکی ئەپلۆدکردنی APKـەیە...', 'info');
+                const fileBody = await toBase64(apkFile);
+                const response = await API.uploadFile({ bucket: 'apks', fileName: `${Date.now()}-${apkFile.name}`, fileBody, contentType: 'application/vnd.android.package-archive' });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Failed to upload APK');
+                downloadUrl = result.publicUrl;
+            }
+
+            const appData = {
+                name: getEl('app-name').value.trim(),
+                description: getEl('app-description').value.trim(),
+                category: getEl('app-category').value,
+                version: getEl('app-version').value.trim(),
+                icon: iconUrl,
+                download_url: downloadUrl,
+            };
+
+            const response = id ? await API.updateApp({ ...appData, id }) : await API.addApp(appData);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "کێشەیەک لە پاشەکەوتکردن ڕوویدا");
+            }
+
+            showToast(id ? "ئەپ نوێکرایەوە" : "ئەپ زیادکرا", 'success');
+            await loadData();
+            navigateToPage('apps');
+
+        } catch (error) {
+            showToast(`کێشەیەک ڕوویدا: ${error.message}`, "error");
+        } finally {
+            submitBtn.disabled = false;
+            resetAppForm();
+        }
+    }
+
+    // ---- 5. NAVIGATION AND AUTHENTICATION ----
+
+    function navigateToPage(pageId, appId = null) {
+        document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+        const targetPage = getEl(`${pageId}-page`);
+        if (targetPage) targetPage.classList.remove('hidden');
+
+        if (pageId === 'app-details' && appId) renderAppDetails(appId);
+        else if (pageId === 'add-app') {
+            resetAppForm();
+            if (appId) handleEditApp(appId);
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.toggle('active', link.dataset.page === pageId);
+        });
+        getEl('page-title').textContent = document.querySelector(`.nav-link[data-page="${pageId}"]`)?.textContent || 'وردەکاریی ئەپ';
+        getEl('sidebar').classList.remove('open');
+        getEl('overlay').classList.add('hidden');
+    }
+
+    function setupUIForRole() {
+        const isAdmin = currentUser && currentUser.role === 'admin';
+        document.querySelectorAll('[data-role="admin"]').forEach(el => {
+            el.style.display = isAdmin ? '' : 'none';
+        });
+        getEl('admin-login-btn').style.display = isAdmin ? 'none' : '';
+        getEl('logout-btn').style.display = isAdmin ? '' : 'none';
+        renderAll();
+    }
+
+    function handleLogin(event) {
+        event.preventDefault();
+        const email = getEl('email').value.trim();
+        const password = getEl('password').value;
+        if (email === 'admin@store.com' && password === '1234') {
+            currentUser = { role: 'admin' };
+            sessionStorage.setItem('kurdAppAdmin', JSON.stringify(currentUser));
+            getEl('login-modal-overlay').classList.add('hidden');
+            setupUIForRole();
+            showToast('بەخێربێیتەوە ئەدمین!', 'success');
+        } else {
+            getEl('login-error').textContent = 'ئیمەیڵ یان وشەی نهێنی هەڵەیە.';
+        }
+    }
+
+    function handleLogout() {
+        currentUser = null;
+        sessionStorage.removeItem('kurdAppAdmin');
+        navigateToPage('apps');
+        setupUIForRole();
+        showToast('چوونەدەرەوە ئەنجامدرا');
+    }
+
+    function checkSession() {
+        const storedAdmin = sessionStorage.getItem('kurdAppAdmin');
+        if (storedAdmin) {
+            currentUser = JSON.parse(storedAdmin);
+        }
+    }
+    
+    // ---- 6. INITIALIZATION ----
+
+    function init() {
+        // --- Setup All Event Listeners ---
+        getEl('login-form').addEventListener('submit', handleLogin);
+        getEl('logout-btn').addEventListener('click', handleLogout);
+        getEl('admin-login-btn').addEventListener('click', () => getEl('login-modal-overlay').classList.remove('hidden'));
+        getEl('close-login-btn').addEventListener('click', () => getEl('login-modal-overlay').classList.add('hidden'));
+        getEl('menu-toggle-btn').addEventListener('click', () => getEl('sidebar').classList.add('open'));
+        getEl('close-btn').addEventListener('click', () => getEl('sidebar').classList.remove('open'));
+        getEl('overlay').addEventListener('click', (e) => {
             if (e.target.id === 'overlay') {
                 getEl('sidebar').classList.remove('open');
                 getEl('login-modal-overlay').classList.add('hidden');
             }
         });
-
+        
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => { e.preventDefault(); navigateToPage(e.currentTarget.dataset.page); });
         });
@@ -239,30 +317,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = e.target.closest('.app-card');
             if (!card) return;
             const appId = card.dataset.id;
-            if (e.target.closest('.edit-app-btn')) { navigateToPage('add-app', appId); } 
-            else if (e.target.closest('.delete-app-btn')) { handleDeleteApp(appId); }
+            const editButton = e.target.closest('.edit-app-btn');
+            const deleteButton = e.target.closest('.delete-app-btn');
+
+            if (editButton) { navigateToPage('add-app', appId); } 
+            else if (deleteButton) { handleDeleteApp(appId); }
             else { navigateToPage('app-details', appId); }
         });
 
         const addAppForm = getEl('add-app-form');
         if (addAppForm) {
             addAppForm.addEventListener('submit', handleAddOrUpdateApp);
-            getEl('app-icon-file').addEventListener('change', () => handleLogin = (event) => { /* ... */ };
-    const handleLogout = () => { /* ... */ };
-    const checkSession = () => { /* ... */ };
-
-    // ---- Add/Update App & File Handling ----
-    const toBase64 = file => new Promise((resolve, reject) => { /* ... */ });
-    const handleAddOrUpdateApp = async (event) => { /* ... */ };
-    const resetAppForm = () => { /* ... */ };
-
-    // ---- App Initialization ----
-    function init() {
-        // ... ALL event listeners from previous final version
-        // This is where you put login listeners, sidebar listeners, etc.
+            getEl('app-icon-file').addEventListener('change', () => {
+                const file = getEl('app-icon-file').files[0];
+                if (file) { getEl('icon-preview').src = URL.createObjectURL(file); getEl('icon-preview').classList.remove('hidden'); }
+            });
+            getEl('app-apk-file').addEventListener('change', () => {
+                const file = getEl('app-apk-file').files[0];
+                if (file) { getEl('apk-file-name').textContent = file.name; }
+            });
+        }
+        
+        getEl('details-download-btn').addEventListener('click', handleDownloadClick);
+        document.querySelector('.back-btn').addEventListener('click', () => navigateToPage('apps'));
+        getEl('app-search-input').addEventListener('input', (e) => renderApps(state.apps.filter(app => app.name.toLowerCase().includes(e.target.value.toLowerCase()))));
+        
+        // --- Start the App ---
+        checkSession();
+        loadData();
     }
 
-    // A complete `init` and the rest of the functions can be copied from the full script below
-    
     init();
 });
