@@ -1,4 +1,41 @@
-document.addEventListener('DOMContentLoaded', () => {
+// A very simple script for debugging
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log("پەڕەکە لۆد بوو، دەست بە وەرگرتنی داتا دەکەین...");
+
+    try {
+        // 1. Trying to fetch the data from the backend function
+        const response = await fetch('/.netlify/functions/get-apps');
+        console.log("وەڵام لە سێرڤەرەوە وەرگیرا:", response);
+
+        // 2. Check if the response was successful
+        if (!response.ok) {
+            // If not successful, throw an error with the status
+            throw new Error(`کێشەی تۆڕ: سێرڤەر وەڵامی ${response.status}ی دایەوە`);
+        }
+
+        // 3. Parse the JSON data from the response
+        const apps = await response.json();
+        
+        // 4. THIS IS THE MOST IMPORTANT STEP: Log the received data to the console
+        console.log("----------");
+        console.log("داتای وەرگیراو لە داتابەیس:");
+        console.table(apps); // .table() shows the data in a nice format
+        console.log("----------");
+
+        // We will stop here. We are not trying to render anything yet.
+        
+    } catch (error) {
+        // If any step fails, log the error
+        console.error("هەڵەیەک ڕوویدا لە کاتی وەرگرتنی داتادا:", error);
+        
+        // Also display a message on the page
+        const appCategoriesContainer = document.getElementById('app-categories');
+        if (appCategoriesContainer) {
+            appCategoriesContainer.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
+        }
+    }
+});document.addEventListener('DOMContentLoaded', () => {
     // ---- Global State & API ----
     let state = { apps: [] };
     let currentUser = null; 
