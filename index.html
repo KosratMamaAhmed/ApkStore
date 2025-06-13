@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kurd App Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div id="login-modal-overlay" class="overlay hidden">
+        <div id="login-container" class="login-box">
+            <button id="close-login-btn" class="close-btn" style="position: absolute; top: 10px; left: 20px; font-size: 2.5rem;">×</button>
+            <img src="https://i.ibb.co/9vjYpQZ/apk-store-logo.png" alt="Store Icon" class="login-icon">
+            <h2>چوونەژوورەوەی ئەدمین</h2>
+            <form id="login-form">
+                <div class="input-group"><label for="email">ئیمەیڵ</label><input type="email" id="email" required value="admin@store.com"></div>
+                <div class="input-group"><label for="password">وشەی نهێنی</label><input type="password" id="password" required value="1234"></div>
+                <button type="submit" class="btn btn-primary">چوونەژوورەوە</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+    <div id="app-container">
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header"><h3>لیستی بەشەکان</h3><button id="close-btn" class="close-btn">×</button></div>
+            <nav>
+                <ul>
+                    <li data-role="admin" style="display: none;"><a href="#" class="nav-link" data-page="dashboard">داشبۆرد</a></li>
+                    <li><a href="#" class="nav-link active" data-page="apps">ئەپەکان</a></li>
+                    <li data-role="admin" style="display: none;"><a href="#" class="nav-link" data-page="add-app">زیادکردنی ئەپ</a></li>
+                </ul>
+            </nav>
+            <button id="admin-login-btn" class="btn btn-secondary">چوونەژوورەوەی ئەدمین</button>
+            <button id="logout-btn" class="btn btn-danger" style="display: none;">چوونەدەرەوە</button>
+        </aside>
+        <div id="overlay" class="overlay hidden"></div>
+        <main class="main-content">
+            <header class="main-header"><button id="menu-toggle-btn" class="menu-toggle">☰</button><h1 id="page-title">ئەپەکان</h1></header>
+            <section id="dashboard-page" class="page hidden" data-role="admin">
+                <div class="stats-grid"><div class="stat-card"><h4>کۆی ئەپەکان</h4><p id="total-apps">٠</p></div><div class="stat-card"><h4>کۆی داگرتنەکان</h4><p id="total-downloads">٠</p></div></div>
+                <div class="card"><h3>پڕ داگرتنترین ئەپەکان</h3><div id="most-downloaded-list" class="item-list"></div></div>
+            </section>
+            <section id="apps-page" class="page"><div class="toolbar"><input type="text" id="app-search-input" placeholder="گەڕان بۆ ئەپ..."></div><div id="app-categories"></div></section>
+            <section id="add-app-page" class="page hidden" data-role="admin">
+                 <div class="card"><h3 id="form-title">زیادکردنی ئەپی نوێ</h3><form id="add-app-form" class="form-grid"><input type="hidden" id="app-id-input"><input type="text" id="app-name" placeholder="ناوی ئەپ" required><textarea id="app-description" placeholder="وەسفی ئەپ" rows="4" required></textarea><select id="app-category" required><option value="" disabled selected>پۆلێن هەڵبژێرە</option><option value="games">یاری</option><option value="tools">ئامراز</option><option value="social">کۆمەڵایەتی</option></select><input type="text" id="app-version" placeholder="ڤێرژن" required><div class="logo-input-group"><label for="app-icon-file">ئایکۆنی ئەپ</label><input type="file" id="app-icon-file" class="hidden" accept="image/*"><label for="app-icon-file" class="btn btn-secondary">هەڵبژاردنی وێنە</label><img id="icon-preview" class="logo-preview hidden" src="#" alt="Icon Preview"/></div><div class="download-input-group"><label for="app-apk-file">فایلی APK</label><input type="file" id="app-apk-file" class="hidden" accept=".apk"><label for="app-apk-file" class="btn btn-secondary">هەڵبژاردنی فایلی APK</label><span id="apk-file-name" class="file-name-display"></span></div><button type="submit" id="submit-app-btn" class="btn btn-primary btn-full-width">زیادکردن</button></form></div>
+            </section>
+            <section id="app-details-page" class="page hidden">
+                <div class="details-container"><button class="btn back-btn">→ گەڕانەوە</button><header class="details-header"><img id="details-app-icon" src="" alt="App Icon"><div class="details-header-info"><h2 id="details-app-name"></h2><span id="details-app-category" class="category-badge"></span></div></header><div class="details-body"><h3>وەسف</h3><p id="details-app-description"></p><div class="details-meta"><span><strong>ڤێرژن:</strong> <span id="details-app-version"></span></span><span><strong>داگرتن:</strong> <span id="details-app-downloads"></span></span></div></div><footer class="details-footer"><a href="#" id="details-download-btn" class="btn btn-primary download-btn" download>داگرتن</a></footer></div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

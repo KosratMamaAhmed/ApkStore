@@ -1,0 +1,8 @@
+{
+  "name": "kurd-app-store-final",
+  "version": "1.0.0",
+  "description": "A secure app store with a public view and an admin panel.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
