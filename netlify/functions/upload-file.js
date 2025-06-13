@@ -1,65 +1,76 @@
 import { createClient } from '@supabase/supabase-js';
-
-// Initialize the Supabase client with the secret service role key
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 export const handler = async (event) => {
-  // 1. Only allow POST requests
-  if (event.httpMethod !== 'POST') {
-    return { 
-      statusCode: 405, 
-      body: JSON.stringify({ error: 'Method Not Allowed' }) 
-    };
-  }
-
-  try {
-    // 2. Parse the data sent from the frontend
-    const { bucket, fileName, fileBody, contentType } = JSON.parse(event.body);
-
-    // Ensure all required data is present
-    if (!bucket || !fileName || !fileBody || !contentType) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Missing required file data: bucket, fileName, fileBody, or contentType.' })
-      };
-    }
-    
-    // 3. Convert the base64 string back to a file buffer
-    const buffer = Buffer.from(fileBody, 'base64');
-
-    // 4. Upload the file to the specified Supabase Storage bucket
-    const { error: uploadError } = await supabase.storage
-      .from(bucket) // Use the bucket name sent from the frontend ('icons' or 'apks')
-      .upload(fileName, buffer, {
-        contentType: contentType,
-        upsert: true, // If a file with the same name exists, overwrite it
-      });
-
-    if (uploadError) {
-      // If the upload fails, throw an error
-      throw uploadError;
-    }
-    
-    // 5. If the upload is successful, get the public URL of the file
-    const { data: urlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(fileName);
-
-    if (!urlData.publicUrl) {
-        throw new Error("File uploaded, but could not generate public URL.");
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
     }
 
-    // 6. Return the public URL to the frontend
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ publicUrl: urlData.publicUrl }),
-    };
+    try {
+        // Log auth role for debugging
+        console.log('Auth role:', await supabase.auth.getSession().then(session => session?.user?.role || 'unknown'));
 
-  } catch (err) {
-    console.error('Error in upload-file function:', err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
-    };
-  }
+        // Log full event for debugging
+        console.log('Event:', JSON.stringify(event, null, 2));
+
+        // Parse request body
+        let body;
+        try {
+            body = JSON.parse(event.body);
+        } catch (parseError) {
+            console.error('Body parse error:', parseError);
+            throw new Error('Invalid request body');
+        }
+
+        const { bucket, fileName, fileBody, contentType } = body;
+
+        // Log input for debugging
+        console.log('Upload request:', { bucket, fileName, contentType });
+
+        // Validate bucket name
+        if (!['icons', 'apks'].includes(bucket)) {
+            throw new Error(`Invalid bucket: ${bucket}`);
+        }
+
+        // Validate fileName and fileBody
+        if (!fileName || !fileBody) {
+            throw new Error('Missing fileName or fileBody');
+        }
+
+        // Convert base64 to buffer
+        let buffer;
+        try {
+            buffer = Buffer.from(fileBody, 'base64');
+        } catch (base64Error) {
+            console.error('Base64 decode error:', base64Error);
+            throw new Error('Invalid base64 fileBody');
+        }
+
+        // Upload file to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+            .from(bucket)
+            .upload(fileName, buffer, { contentType: contentType, upsert: true });
+
+        if (uploadError) {
+            console.error('Upload error:', uploadError);
+            throw new Error(`Upload failed: ${uploadError.message}`);
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(fileName);
+
+        // Log success
+        console.log('File uploaded successfully:', { publicUrl });
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ publicUrl })
+        };
+    } catch (err) {
+        console.error('Handler error:', err);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: err.message })
+        };
+    }
 };
